@@ -7,8 +7,9 @@ from db.models import Genre, Actor
 
 def main() -> QuerySet:
     genres = ["Western", "Action", "Dramma"]
-    for genre in genres:
-        Genre.objects.create(name=genre)
+    Genre.objects.bulk_create(
+        [Genre(name=genre) for genre in genres]
+    )
 
     actors = [
         ("George", "Klooney"),
@@ -19,11 +20,15 @@ def main() -> QuerySet:
         ("Scarlett", "Johansson")
     ]
 
-    for actor_name, actors_surname in actors:
-        Actor.objects.create(
-            first_name=actor_name,
-            last_name=actors_surname
-        )
+    Actor.objects.bulk_create(
+        [
+            Actor(
+                first_name=actor_name,
+                last_name=actor_surname
+            )
+            for actor_name, actor_surname in actors
+        ]
+    )
 
     Genre.objects.filter(name="Dramma").update(name="Drama")
 
